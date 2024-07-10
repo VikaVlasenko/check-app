@@ -1,6 +1,7 @@
 package com.mycompany.app.model;
 //package model;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class Result {
   public static Integer discountCard,balanceDebitCard;
   public static Map<Integer, Integer> listIn = new HashMap<>();   
 
-  public Result(int nom,String [] spispar,String filepath)
+  public Result(int nom,String [] spispar,String filepath) throws IOException
   {
 
     ReadPar(spispar);
@@ -22,6 +23,7 @@ public class Result {
 
     Check check=new Check();
     Check.CheckFormer(mDiscount,mProduct,listIn,discountCard);
+    Check.saveCSV(filepath);
     
 
   }

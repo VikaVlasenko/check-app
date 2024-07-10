@@ -1,8 +1,9 @@
 package com.mycompany.app.model;
 
 import java.io.FileWriter;
-import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -65,31 +66,33 @@ public class Check {
                   //System.out.println("name="+i.description+"\t price="+nPrice+"\t");
                 }
 
+
     }
 
     
 
-    public static void saveCSV(String filepath)
+    public static void saveCSV(String filepath)  throws IOException 
     {
 
-        // try {
-        //                 FileWriter writer = new FileWriter(filepath);
-        //                 writer.write ();
-        //                 writer.close();
-        //         } catch (IOException e) {
-        //                 System.out.println("Ошибка при записи в файл");
-        //                 e.printStackTrace();
-        //             }
+        try {
+            FileWriter writer = new FileWriter(filepath+"result.csv");
 
+            Date date = new Date();
 
-        //     for(Item i: Check.list)
-        //     {
-        //     String str=i.description+";"+i.qty+";"+i.price+";";
-        //     System.out.println(str);
-        //     }
+            
+            writer.write(date.toString()+"\r");
+            for(ItemCheck i: list)
+            {
+                String str=i.description+";"+i.qty+";"+i.price+";\r";
+                writer.write(str);
 
+            }
+            writer.close();
 
-
+            } catch (IOException e) {
+                    System.out.println("Ошибка при записи в файл");
+                    e.printStackTrace();
+            }
     }
 
 

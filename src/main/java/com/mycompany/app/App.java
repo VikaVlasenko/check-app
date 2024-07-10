@@ -21,9 +21,10 @@ package com.mycompany.app;
         String pathm=System.getProperty("user.dir");  
         
         newResult=new Result(0,argsm,pathm+"\\src\\main\\java\\com\\mycompany\\app\\resources\\");          
+
    
     }
- 
+
 
     //  Тестирование
     public static void connectP()
