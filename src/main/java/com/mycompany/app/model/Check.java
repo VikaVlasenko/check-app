@@ -1,17 +1,21 @@
 package com.mycompany.app.model;
-
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.sql.Date;
+
 
 import com.mycompany.app.model.Product.CARDp;
 
-public class Check {
+public class Check 
+{
    
     public static List<ItemCheck> list=new ArrayList<>();
+    static database DB;
 
     public static class ItemCheck
     {
@@ -37,6 +41,11 @@ public class Check {
     public Check(){
         
     }
+
+
+     void  setDB(database db) {
+        Check.DB = db;
+      }  
 
     //  Добавление товара в чек
     public static void addItem(String descr, float price, int quantity, boolean isWholesale)
@@ -70,14 +79,15 @@ public class Check {
     }
 
     
-
+    //  Запись чека в файл CSV
     public static void saveCSV(String filepath)  throws IOException 
     {
 
         try {
             FileWriter writer = new FileWriter(filepath+"result.csv");
 
-            Date date = new Date();
+            long ml=System.currentTimeMillis();  
+            java.sql.Date date = new Date(ml);
 
             
             writer.write(date.toString()+"\r");
@@ -95,5 +105,40 @@ public class Check {
             }
     }
 
+
+    // Запись чека в базу данных
+    public static void saveDB() throws SQLException
+    {
+        
+        long ml=System.currentTimeMillis();  
+        java.sql.Date date=new Date(ml);
+        
+        PreparedStatement st;
+        int npp=1;
+
+
+        st=DB.insertSQL("insert into public.result(date_check,index,description,price,"+
+        "quantity,isWholesale) values(?,?,?,?,?,?)");
+
+        for(ItemCheck i: list)
+        {
+            try
+            {
+            st.setDate(1, date) ;
+            st.setInt(2, npp);
+            st.setString(3, i.description);
+            st.setFloat(4, i.price);
+            st.setInt(5, i.qty);
+            st.setBoolean(6, i.isWholesale);
+            st.executeUpdate();
+            }
+            catch(SQLException ex)
+            { System.out.println(ex.toString());}
+
+            npp++;
+
+        }       
+
+    }
 
 }

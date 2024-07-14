@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class Result {
 
-  public static Integer signDatabase;     //
+  public static Integer signDatabase;     //  если 1 - читать из Базы Данных
   public static Integer discountCard,balanceDebitCard;
-  public static Map<Integer, Integer> listIn = new HashMap<>();   
+  public static Map<Integer, Integer> listIn = new HashMap<>();   // Список входных параметров
 
   public static database DB;
 
@@ -28,14 +28,20 @@ public class Result {
     Discount.ReadData(filepath+"discountCards.csv",signDatabase);
 
 
-   
-    Product  mProduct  =new Product(filepath+"products.csv");
+    Product  mProduct  =new Product();
+    mProduct.setDB(DB);
+    mProduct.ReadData(filepath+"products.csv",signDatabase);
 
     //int cnt=Product.listProduct.size();
 
+    @SuppressWarnings("unused")
     Check check=new Check();
+    check.setDB(DB);
     Check.CheckFormer(mDiscount,mProduct,listIn,discountCard);
-    Check.saveCSV(filepath);
+    if(signDatabase==0)
+      Check.saveCSV(filepath);
+    else
+      Check.saveDB();
     
 
   }
@@ -81,8 +87,6 @@ public class Result {
 
         if(arg.contains("PostGree")) 
           signDatabase=1;
-
-
     }
     return ;
    }

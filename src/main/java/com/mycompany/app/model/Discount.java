@@ -50,20 +50,21 @@ public class Discount {
   {
     ResultSet result = null;
 
-    result=database.getSQL("SELECT id,name FROM ctcviewad.users ");
+    result=DB.getSQL("SELECT number,percent from public.disconts");
 
     while (result.next()) {
-      System.out.println("np #" + result.getRow()
-              + "\t Номер  #" + result.getInt("id")
-              + "\t Имя " + result.getString("name"));
-             
+
+      int index=result.getRow();
+      int number=result.getInt("number");
+      int percent=result.getInt("percent");
+
+      CARD newCard=new CARD(index,number,percent);
+      listDiscont.add(newCard);                       
     }                
-
-    database.closeConnet();
-
+    DB.closeConnet();
   }
 
-  //  Читает из файла дисконтные карты
+  //  Читает из файла CSV дисконтные карты
   public static  void ReadDiscountCSV(String filepath)
   {
 

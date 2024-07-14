@@ -7,20 +7,20 @@ public class database {
     
   public static int db;
 
-  static String url;
-  static String name;
-  static String password;
+  private static String url;
+  private static String name;
+  private static String password;
 
-  static Statement statement = null;
-  static Connection connection = null;
+  private static Statement statement = null;
+  private static Connection connection = null;
   static ResultSet result=null;
 
   public database()
   {
 
-    url = "jdbc:postgresql://127.0.0.1:5432/ctcdb";
-    name = "u_ctc";
-    password = "uc";
+    url = "jdbc:postgresql://127.0.0.1:5432/postgres";
+    name = "userdb";
+    password = "us";
 
   }
 
@@ -40,14 +40,14 @@ public class database {
   }
 
   //----------------------------------------------------------------
-  public static ResultSet getSQL(String SQL) throws SQLException
+  public ResultSet getSQL(String SQL) throws SQLException
   {
     ResultSet result = null;
 
     mConnect();
 
     try{
-    result=statement.executeQuery("SELECT id,name FROM ctcviewad.users ");}
+    result=statement.executeQuery(SQL);}
     catch (Exception ex) {
     throw new RuntimeException("Ошибка запроса", ex);
     }
@@ -56,8 +56,22 @@ public class database {
   }
 
 
+  public PreparedStatement insertSQL(String SQL) throws SQLException
+  {
+    PreparedStatement statement;
+    mConnect();
+    try{
+    statement = connection.prepareStatement(SQL);}
+    catch (Exception ex) {
+    throw new RuntimeException("Ошибка insert", ex);
+    }
+    return statement;
+  }
+
+
+
   //----------------------------------------------------------------
-  public static void closeConnet() throws SQLException
+  public void closeConnet() throws SQLException
   {
     try{
     statement.close();
