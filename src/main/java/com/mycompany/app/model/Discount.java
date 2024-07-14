@@ -3,11 +3,13 @@ package com.mycompany.app.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Discount {
     
-    
+    static database DB;
     
     public static class CARD{
       int index;
@@ -22,17 +24,47 @@ public class Discount {
       }
     };
 
-  
-  Discount(String filepath)
+
+  public static ArrayList<CARD>  listDiscont=new ArrayList<CARD>();    
+  //----------------------------------------------------------------
+  Discount()
+  {  
+
+  }
+ //---------------------------------------------------------------------- 
+  void setDB(database db) {
+    Discount.DB = db;
+  }  
+ //---------------------------------------------------------------------- 
+  public static void ReadData(String filepath,Integer signDatabase) throws SQLException
   {
-    ReadDiscount(filepath);
+    if(signDatabase==0)
+      ReadDiscountCSV(filepath);
+    else
+      ReadDiscountDB();
+
   }
 
+  //  Читает из базы данных дисконтные карты  
+  public static void ReadDiscountDB() throws SQLException
+  {
+    ResultSet result = null;
 
-  public static ArrayList<CARD>  listDiscont=new ArrayList<CARD>();
+    result=database.getSQL("SELECT id,name FROM ctcviewad.users ");
+
+    while (result.next()) {
+      System.out.println("np #" + result.getRow()
+              + "\t Номер  #" + result.getInt("id")
+              + "\t Имя " + result.getString("name"));
+             
+    }                
+
+    database.closeConnet();
+
+  }
 
   //  Читает из файла дисконтные карты
-  public static  void ReadDiscount(String filepath)
+  public static  void ReadDiscountCSV(String filepath)
   {
 
     Integer index=0;

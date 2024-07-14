@@ -2,24 +2,33 @@ package com.mycompany.app.model;
 //package model;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 
-
-
-
 public class Result {
 
+  public static Integer signDatabase;     //
   public static Integer discountCard,balanceDebitCard;
   public static Map<Integer, Integer> listIn = new HashMap<>();   
 
-  public Result(int nom,String [] spispar,String filepath) throws IOException
+  public static database DB;
+
+
+  public Result(int nom,String [] spispar,String filepath) throws IOException, SQLException
   {
 
     ReadPar(spispar);
 
-    Discount mDiscount =new Discount(filepath+"discountCards.csv");
+    DB=new database();
+
+    Discount mDiscount =new Discount();
+    mDiscount.setDB(DB);   
+    Discount.ReadData(filepath+"discountCards.csv",signDatabase);
+
+
+   
     Product  mProduct  =new Product(filepath+"products.csv");
 
     //int cnt=Product.listProduct.size();
@@ -37,6 +46,7 @@ public class Result {
    private static void ReadPar(String [] spispar)
    {
   
+    signDatabase=0;
     //  "3-1 2-1 3-2"
     for (String arg : spispar)  {
       if(arg.contains("-"))
@@ -68,6 +78,10 @@ public class Result {
 
         if(arg.contains("balanceDebitCard="))
          balanceDebitCard=Integer.parseInt(arg.substring("balanceDebitCard=".length()));
+
+        if(arg.contains("PostGree")) 
+          signDatabase=1;
+
 
     }
     return ;

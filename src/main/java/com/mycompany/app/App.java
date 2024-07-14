@@ -2,19 +2,21 @@ package com.mycompany.app;
 
  import java.io.IOException;
 
- import com.mycompany.app.model.Result;
- import java.sql.*;
+import com.mycompany.app.model.Result;
+import com.mycompany.app.model.database;
+
+import java.sql.*;
  
- 
+
  
  public class App {
  
    public static Result   newResult;
  
-     public static void main(String[] args) throws IOException 
+     public static void main(String[] args) throws IOException, SQLException 
      {
        
-        String [] argsm ={"3-1 2-1 3-2","discountCard=3232","balanceDebitCard=200"}; 
+        String [] argsm ={"3-1 2-1 3-2","discountCard=3232","balanceDebitCard=200","PostGree"}; 
 
         //connectP();
 
@@ -56,6 +58,8 @@ package com.mycompany.app;
                     + "\t Имя " + result1.getString("name"));
         }                
 
+        statement.close();
+        connection.close();
 
        }catch (Exception ex) {
         throw new RuntimeException("Не удалось подключить драйвер", ex);
