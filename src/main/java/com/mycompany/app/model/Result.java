@@ -7,6 +7,8 @@ import java.util.Map;
 
 
 
+
+
 public class Result {
 
   public static Integer discountCard,balanceDebitCard;
